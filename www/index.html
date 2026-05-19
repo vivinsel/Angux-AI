@@ -4,15 +4,12 @@
 
 <meta charset="utf-8">
 
-<meta
-name="viewport"
-content="
-width=device-width,
+<meta name="viewport"
+content="width=device-width,
 initial-scale=1,
+viewport-fit=cover,
 maximum-scale=1,
-user-scalable=no,
-viewport-fit=cover
-">
+user-scalable=no">
 
 <title>Angux AI</title>
 
@@ -22,7 +19,6 @@ viewport-fit=cover
 margin:0;
 padding:0;
 box-sizing:border-box;
--webkit-tap-highlight-color:transparent;
 }
 
 html,body{
@@ -39,57 +35,69 @@ font-family:
 BlinkMacSystemFont,
 sans-serif;
 
+}
+
+body{
+
 display:flex;
+
 justify-content:center;
+
 align-items:center;
 
 padding:
-env(safe-area-inset-top)
-16px
-env(safe-area-inset-bottom)
-16px;
+max(24px,env(safe-area-inset-top))
+24px
+max(24px,env(safe-area-inset-bottom));
 
 }
-
-/* 主容器 */
 
 .container{
 
 width:100%;
-max-width:375px;
 
 display:flex;
+
 justify-content:center;
+
 align-items:center;
 
 }
 
-/* 按鈕 */
-
 button{
 
-width:100%;
+width:82vw;
 
-height:56px;
+max-width:320px;
+
+height:58px;
 
 border:none;
-border-radius:18px;
 
-background:#fff;
-color:#000;
+border-radius:20px;
 
-font-size:18px;
+background:white;
+
+color:black;
+
+font-size:20px;
+
 font-weight:700;
 
-letter-spacing:0.3px;
+letter-spacing:0.5px;
+
+-webkit-tap-highlight-color:transparent;
 
 }
 
 button:active{
+
 transform:scale(0.98);
+
 }
 
 </style>
+
 </head>
 
 <body>
