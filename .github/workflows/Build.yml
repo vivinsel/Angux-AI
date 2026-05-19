@@ -37,16 +37,14 @@ jobs:
           pod install
 
        - name: Build App
-        run: |
+       run: |
           cd ios/App
-          set -o pipefail
           xcodebuild clean build \
             -workspace App.xcworkspace \
             -scheme App \
-            -sdk iphoneos \
             -configuration Release \
-            CODE_SIGNING_ALLOWED=NO \
-            2>&1 | tee xcodebuild.log
+            -destination 'generic/platform=iOS' \
+            CODE_SIGNING_ALLOWED=NO
 
       - name: Upload Build
         uses: actions/upload-artifact@v4
