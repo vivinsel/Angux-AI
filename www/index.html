@@ -1,238 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta charset="utf-8">
-
-<meta name="viewport"
-content="
-width=device-width,
-initial-scale=1,
-viewport-fit=cover,
-maximum-scale=1,
-user-scalable=no
-">
-
-<title>Angux AI - Composer</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Angux AI</title>
 <style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
 
-/* ==========================================
-   1. 變數配置
-   ========================================== */
-:root {
-  --composer-footer_height: 32px;
-  --composer-bar_height: 52px;
-  --composer-bar_width: 768px;
-  --composer-bar_safe-margins: 20px;
-  --scrollbar-width: 10px;
-  --container-max-width: 20rem; 
-}
+  /* 建立一個外殼，這個外殼負責往下退開手機的狀態列 */
+  .iframe-container {
+    width: 100%;
+    height: 100%;
+    /* 🛠️ 關鍵：在這裡強制把整個嵌入的網頁往下推 60px，這樣最上面的字絕對碰不到狀態列 */
+    padding-top: calc(env(safe-area-inset-top) + 60px); 
+  }
 
-/* ==========================================
-   2. 基礎重設
-   ========================================== */
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
-
-html, body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #000;
-  color: #fff;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-/* ==========================================
-   3. 頁面整體佈局 (徹底解決重疊的關鍵)
-   ========================================== */
-.app-layout {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  
-  /* 讓網頁內容從手機狀態列與時間下方再退 24px，確保在你的網頁上絕對不重疊 */
-  padding-top: calc(env(safe-area-inset-top) + 24px);
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
-}
-
-/* 頂部功能列 */
-.header-bar {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  padding: 0 var(--composer-bar_safe-margins);
-  height: 40px;
-  align-items: center;
-}
-
-.login-btn {
-  color: #fff;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  background: rgba(255,255,255,0.1);
-  padding: 6px 14px;
-  border-radius: 20px;
-}
-
-/* 滾動內容區 */
-.scroll-content {
-  flex: 1;
-  overflow-y: scroll;
-  padding: 20px var(--composer-bar_safe-margins);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-
-  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
-  mask-image: linear-gradient(to top, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
-}
-
-.scroll-content::-webkit-scrollbar {
-  width: var(--scrollbar-width);
-}
-.scroll-content::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 5px;
-}
-
-/* 標題文字區塊 */
-.title-container {
-  width: 100%;
-  max-width: var(--container-max-width);
-  margin-bottom: 24px;
-}
-
-.title-text {
-  font-size: clamp(22px, 3vh, 28px);
-  font-weight: 500;
-  letter-spacing: -0.5px;
-}
-
-/* ==========================================
-   4. 輸入框區域 (Composer Parent)
-   ========================================== */
-.composer-parent {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
-}
-
-.composer-bar {
-  width: calc(100% - (var(--composer-bar_safe-margins) * 2));
-  max-width: var(--composer-bar_width);
-  height: var(--composer-bar_height);
-  background: #1e1e1e;
-  border-radius: 26px;
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  margin-bottom: 8px;
-  cursor: pointer;
-}
-
-.composer-input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: #fff;
-  font-size: 16px;
-  outline: none;
-  pointer-events: none; /* 讓整個膠囊點擊都能觸發跳轉 */
-}
-
-.composer-input::placeholder {
-  color: #666;
-}
-
-.icon-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  color: #aaa;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.icon-btn.submit {
-  background: #fff;
-  color: #000;
-}
-
-.composer-footer {
-  width: 100%;
-  height: var(--composer-footer_height);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.footer-text {
-  font-size: 11px;
-  color: #555;
-  text-align: center;
-}
-.footer-text a {
-  color: #777;
-  text-decoration: underline;
-}
-
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
 </style>
 </head>
-
 <body>
 
-<div class="app-layout">
-
-  <div class="header-bar">
-    <div class="login-btn" onclick="openChatGPT()">登入</div>
+  <div class="iframe-container">
+    <iframe src="https://chatgpt.com"></iframe>
   </div>
-
-  <div class="scroll-content">
-    <div class="title-container">
-      <h1 class="title-text">今天有什麼計畫？</h1>
-    </div>
-  </div>
-
-  <div class="composer-parent">
-    
-    <div class="composer-bar" onclick="openChatGPT()">
-      <button class="icon-btn" style="margin-right: 8px; font-size: 20px;">+</button>
-      <input type="text" class="composer-input" placeholder="想問什麼都可以">
-      <button class="icon-btn" style="margin-right: 4px;">🎙️</button>
-      <button class="icon-btn submit">↑</button>
-    </div>
-
-    <div class="composer-footer">
-      <p class="footer-text">
-        傳送訊息至 Angux AI 即表示你同意我們的<a href="#">條款</a>和<a href="#">隱私權政策</a>
-      </p>
-    </div>
-
-  </div>
-
-</div>
-
-<script>
-// 統一管理跳轉邏輯
-function openChatGPT(){
-  window.location.href = "https://chatgpt.com";
-}
-</script>
 
 </body>
 </html>
