@@ -1,0 +1,47 @@
+name: build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install Capacitor
+        run: |
+          npm install @capacitor/core
+          npm install @capacitor/cli
+          npm install @capacitor/ios
+
+      - name: Add iOS
+        run: npx cap add ios
+
+      - name: Sync
+        run: npx cap sync ios
+
+      - name: Build App
+        run: |
+          cd ios/App
+          xcodebuild \
+          -workspace App.xcworkspace \
+          -scheme App \
+          -sdk iphoneos \
+          -configuration Release
+
+      - name: Upload Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build
+          path: ios
