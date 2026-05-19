@@ -1,33 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Angux AI</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
-
-  /* 建立一個外殼，這個外殼負責往下退開手機的狀態列 */
-  .iframe-container {
-    width: 100%;
-    height: 100%;
-    /* 🛠️ 關鍵：在這裡強制把整個嵌入的網頁往下推 60px，這樣最上面的字絕對碰不到狀態列 */
-    padding-top: calc(env(safe-area-inset-top) + 60px); 
-  }
-
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-</style>
-</head>
-<body>
-
-  <div class="iframe-container">
-    <iframe src="https://chatgpt.com"></iframe>
-  </div>
-
-</body>
-</html>
+/* 新增一個專門用來遮擋頂部文字的黑膠布 */
+.top-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* 高度設定 60px，剛好把狀態列以下、登入按鈕以上的重疊字壓死 */
+  height: 60px; 
+  background: #000; /* 純黑遮罩 */
+  z-index: 99999; /* 確保它永遠在最上層 */
+  pointer-events: none; /* 讓這塊遮罩不會影響使用者的手勢點擊 */
+}
