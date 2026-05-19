@@ -1,4 +1,4 @@
-```yaml
+yaml
 name: build IPA
 
 on:
@@ -91,4 +91,4 @@ jobs:
         with:
           name: ipa
           path: ios/App/output
-```
+
