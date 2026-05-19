@@ -1,12 +1,11 @@
-/* 新增一個專門用來遮擋頂部文字的黑膠布 */
-.top-mask {
-  position: absolute;
-  top: 0;
-  left: 0;
+html, body {
   width: 100%;
-  /* 高度設定 60px，剛好把狀態列以下、登入按鈕以上的重疊字壓死 */
-  height: 60px; 
-  background: #000; /* 純黑遮罩 */
-  z-index: 99999; /* 確保它永遠在最上層 */
-  pointer-events: none; /* 讓這塊遮罩不會影響使用者的手勢點擊 */
+  height: 100%;
+  overflow: hidden;
+  
+  /* 🛠️ 把原本的 #000 改成 #fff */
+  background: #fff; 
+  
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
