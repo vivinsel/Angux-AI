@@ -5,11 +5,13 @@
 <meta charset="utf-8">
 
 <meta name="viewport"
-content="width=device-width,
+content="
+width=device-width,
 initial-scale=1,
 viewport-fit=cover,
 maximum-scale=1,
-user-scalable=no">
+user-scalable=no
+">
 
 <title>Angux AI</title>
 
@@ -19,6 +21,7 @@ user-scalable=no">
 margin:0;
 padding:0;
 box-sizing:border-box;
+-webkit-tap-highlight-color: transparent;
 }
 
 html,body{
@@ -26,86 +29,84 @@ html,body{
 width:100%;
 height:100%;
 
-background:#000;
-
 overflow:hidden;
+
+background:#000;
 
 font-family:
 -apple-system,
 BlinkMacSystemFont,
 sans-serif;
 
-}
-
-body{
-
 display:flex;
-
 justify-content:center;
-
 align-items:center;
 
 padding:
-max(24px,env(safe-area-inset-top))
-24px
-max(24px,env(safe-area-inset-bottom));
+env(safe-area-inset-top)
+env(safe-area-inset-right)
+env(safe-area-inset-bottom)
+env(safe-area-inset-left);
 
 }
 
 .container{
 
 width:100%;
+height:100%;
 
 display:flex;
-
 justify-content:center;
-
 align-items:center;
+
+padding:6vw;
 
 }
 
-button{
+.button{
 
 width:82vw;
+max-width:360px;
 
-max-width:320px;
-
-height:58px;
+height:7.2vh;
+min-height:58px;
+max-height:74px;
 
 border:none;
+border-radius:22px;
 
-border-radius:20px;
+background:#fff;
+color:#000;
 
-background:white;
-
-color:black;
-
-font-size:20px;
+font-size:clamp(18px,2.2vh,24px);
 
 font-weight:700;
 
 letter-spacing:0.5px;
 
--webkit-tap-highlight-color:transparent;
+display:flex;
+justify-content:center;
+align-items:center;
 
 }
 
-button:active{
-
+.button:active{
 transform:scale(0.98);
-
 }
 
 </style>
-
 </head>
 
 <body>
 
 <div class="container">
 
-<button onclick="openChatGPT()">
+<button
+class="button"
+onclick="openChatGPT()">
+
 Open Angux AI
+
 </button>
 
 </div>
