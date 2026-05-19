@@ -57,10 +57,13 @@ width:100%;
 height:100%;
 
 display:flex;
-justify-content:center;
-align-items:center;
+flex-direction: column; /* 確保內容是由上往下排列 */
+justify-content: flex-end; /* 讓內容靠底部對齊 */
+align-items: center; /* 水平依然置中 */
 
-padding:6vw;
+/* 調整這裡的 padding-bottom (最後一個數值) */
+/* 8vh 代表距離螢幕底部 8% 的畫面高度，你可以自由調整這個數字 */
+padding: 6vw 6vw 8vh 6vw; 
 
 }
 
