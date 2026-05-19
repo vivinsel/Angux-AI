@@ -1,6 +1,9 @@
 {
   "appId": "com.angux.ai",
   "appName": "Angux AI",
-  "webDir": "www",
-  "bundledWebRuntime": false
+  "webDir": "public",
+  "server": {
+    "url": "https://chatgpt.com",
+    "cleartext": true
+  }
 }
