@@ -13,96 +13,191 @@ maximum-scale=1,
 user-scalable=no
 ">
 
-<title>Angux AI</title>
+<title>Angux AI - Composer</title>
 
 <style>
 
+/* ==========================================
+   1. 變數配置 (符合你的設計規格)
+   ========================================== */
+:root {
+  /* 輸入框/編輯器區域 (Composer Parent) */
+  --composer-footer_height: 32px;
+  --composer-bar_height: 52px;
+  --composer-bar_width: 768px;
+  --composer-bar_safe-margins: 20px;
+  
+  /* 滾動條 */
+  --scrollbar-width: 10px;
+
+  /* 手機端容器限制 (xs: 20rem = 320px) */
+  --container-max-width: 20rem; 
+}
+
+/* ==========================================
+   2. 基礎重設與滿版配置
+   ========================================== */
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
--webkit-tap-highlight-color: transparent;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-html,body{
-
-width:100%;
-height:100%;
-
-overflow:hidden;
-
-background:#000;
-
-font-family:
--apple-system,
-BlinkMacSystemFont,
-sans-serif;
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-/* 修正了原本 padding 的語法錯誤，改用標準的 env 寫法 */
-padding: 
-  calc(env(safe-area-inset-top) + 60px) 
-  env(safe-area-inset-right) 
-  calc(env(safe-area-inset-bottom) + 16px) 
-  env(safe-area-inset-left);
-}
-
-.container{
-
-width:100%;
-height:100%;
-
-display:flex;
-flex-direction: column; /* 讓內容由上往下垂直排列 */
-justify-content: flex-end; /* 讓整體內容靠底部對齊 */
-align-items: center; /* 水平置中 */
-
-padding: 6vw 6vw 6vh 6vw; /* 調整最後一個數值 (6vh) 可以控制按鈕距離底部的距離 */
-
-}
-
-/* 新增：標題文字的樣式 */
-.title {
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* 防止整個網頁歪掉滾動 */
+  background: #000;
   color: #fff;
-  font-size: clamp(20px, 3vh, 28px); /* 字體大小會根據螢幕高度縮放 */
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ==========================================
+   3. 頁面佈局與滾動內容遮罩 (Masked Content)
+   ========================================== */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  /* 考量手機頂部安全區域 (如瀏海/動態島) */
+  padding-top: calc(env(safe-area-inset-top) + 16px);
+}
+
+/* 頂部功能列 (如登入、選單) */
+.header-bar {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 var(--composer-bar_safe-margins);
+  height: 40px;
+}
+
+.login-btn {
+  color: #fff;
+  font-size: 16px;
   font-weight: 500;
-  margin-bottom: 24px; /* 這裡的數值可以控制「文字」與「下方按鈕」之間的間距 */
+  cursor: pointer;
+  background: rgba(255,255,255,0.1);
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+/* 滾動內容區：套用細緻的不透明度漸層遮罩 */
+.scroll-content {
+  flex: 1;
+  overflow-y: scroll;
+  padding: 20px var(--composer-bar_safe-margins);
   text-align: center;
-  letter-spacing: 0.5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end; /* 讓初始內容靠下方 */
+
+  /* 核心：遮罩與漸層配置 (從頂部不透明 0% 到完全透明 100%) 
+     這裡模擬滾動邊界處呈現平滑淡出的視覺效果 */
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(to top, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
 }
 
-.button{
-
-width:82vw;
-max-width:360px;
-
-height:7.2vh;
-min-height:58px;
-max-height:74px;
-
-border:none;
-border-radius:22px;
-
-background:#fff;
-color:#000;
-
-font-size:clamp(14px,1.8vh,20px);
-
-font-weight:700;
-
-letter-spacing:0.5px;
-
-display:flex;
-justify-content:center;
-align-items:center;
-
+/* 客製化滾動條寬度 */
+.scroll-content::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+}
+.scroll-content::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 5px;
 }
 
-.button:active{
-transform:scale(0.98);
+/* 標題文字區塊 (限制在手機 xs 規格：20rem) */
+.title-container {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin-bottom: 24px;
+}
+
+.title-text {
+  font-size: clamp(22px, 3vh, 28px);
+  font-weight: 500;
+  letter-spacing: -0.5px;
+}
+
+/* ==========================================
+   4. 輸入框區域 (Composer Parent)
+   ========================================== */
+.composer-parent {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* 考量手機底部安全區域 (如 Home Indicator 條) */
+  padding-bottom: calc(env(safe-area-inset-bottom) + 8px);
+}
+
+/* 主要輸入列 (Composer Bar) */
+.composer-bar {
+  /* 響應式寬度：手機上滿版扣除兩邊安全留白，大螢幕最大不超過 768px */
+  width: calc(100% - (var(--composer-bar_safe-margins) * 2));
+  max-width: var(--composer-bar_width);
+  height: var(--composer-bar_height);
+  
+  background: #1e1e1e;
+  border-radius: 26px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  margin-bottom: 8px;
+}
+
+.composer-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  outline: none;
+}
+
+.composer-input::placeholder {
+  color: #666;
+}
+
+/* 主要輸入列內的按鈕圖示 */
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: #aaa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.icon-btn.submit {
+  background: #fff;
+  color: #000;
+}
+
+/* 底部工具列 (Composer Footer) */
+.composer-footer {
+  width: 100%;
+  height: var(--composer-footer_height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-text {
+  font-size: 11px;
+  color: #555;
+  text-align: center;
+}
+.footer-text a {
+  color: #777;
+  text-decoration: underline;
 }
 
 </style>
@@ -110,32 +205,38 @@ transform:scale(0.98);
 
 <body>
 
-<div class="container">
+<div class="app-layout">
 
-  <h1 class="title">我們該從哪裡開始？</h1>
+  <div class="header-bar">
+    <div class="login-btn">登入</div>
+  </div>
 
-  <button
-  class="button"
-  onclick="openChatGPT()">
-  
-  Open Angux AI
-  
-  </button>
+  <div class="scroll-content">
+    <div class="title-container">
+      <h1 class="title-text">我們該從哪裡開始？</h1>
+    </div>
+  </div>
 
-<div class="login-btn">登入</div>
+  <div class="composer-parent">
+    
+    <div class="composer-bar">
+      <button class="icon-btn" style="margin-right: 8px; font-size: 20px;">+</button>
+      
+      <input type="text" class="composer-input" placeholder="想問什麼都可以">
+      
+      <button class="icon-btn" style="margin-right: 4px;">🎙️</button>
+      <button class="icon-btn submit">↑</button>
+    </div>
+
+    <div class="composer-footer">
+      <p class="footer-text">
+        傳送訊息至 Angux AI 即表示你同意我們的<a href="#">條款</a>和<a href="#">隱私權政策</a>
+      </p>
+    </div>
+
+  </div>
 
 </div>
-
-<script>
-
-function openChatGPT(){
-
-window.location.href =
-"https://chatgpt.com";
-
-}
-
-</script>
 
 </body>
 </html>
