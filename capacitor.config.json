@@ -1,0 +1,6 @@
+{
+  "appId": "com.angux.ai",
+  "appName": "Angux AI",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
