@@ -18,24 +18,19 @@ user-scalable=no
 <style>
 
 /* ==========================================
-   1. 變數配置 (符合你的設計規格)
+   1. 變數配置
    ========================================== */
 :root {
-  /* 輸入框/編輯器區域 (Composer Parent) */
   --composer-footer_height: 32px;
   --composer-bar_height: 52px;
   --composer-bar_width: 768px;
   --composer-bar_safe-margins: 20px;
-  
-  /* 滾動條 */
   --scrollbar-width: 10px;
-
-  /* 手機端容器限制 (xs: 20rem = 320px) */
   --container-max-width: 20rem; 
 }
 
 /* ==========================================
-   2. 基礎重設與滿版配置
+   2. 基礎重設
    ========================================== */
 *{
   margin: 0;
@@ -44,39 +39,44 @@ user-scalable=no
   -webkit-tap-highlight-color: transparent;
 }
 
+/* 讓最外層底色變黑，不給任何 padding，避免干擾 */
 html, body {
   width: 100%;
   height: 100%;
-  overflow: hidden; /* 防止整個網頁歪掉滾動 */
+  overflow: hidden;
   background: #000;
   color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* ==========================================
-   3. 頁面佈局與滾動內容遮罩 (Masked Content)
+   3. 頁面整體佈局 (徹底解決重疊的關鍵)
    ========================================== */
 .app-layout {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  /* 考量手機頂部安全區域 (如瀏海/動態島) */
-  padding-top: calc(env(safe-area-inset-top) + 16px);
+  
+  /* 🛠️ 關鍵修正：將安全區域寫在這裡，並額外多加上 24px 的緩衝距離，確保絕對不跟時間重疊 */
+  padding-top: calc(env(safe-area-inset-top) + 24px);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
-/* 頂部功能列 (如登入、選單) */
+/* 頂部功能列 */
 .header-bar {
   width: 100%;
   display: flex;
   justify-content: flex-end;
   padding: 0 var(--composer-bar_safe-margins);
   height: 40px;
+  align-items: center;
 }
 
 .login-btn {
   color: #fff;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   background: rgba(255,255,255,0.1);
@@ -84,7 +84,7 @@ html, body {
   border-radius: 20px;
 }
 
-/* 滾動內容區：套用細緻的不透明度漸層遮罩 */
+/* 滾動內容區 */
 .scroll-content {
   flex: 1;
   overflow-y: scroll;
@@ -93,15 +93,12 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end; /* 讓初始內容靠下方 */
+  justify-content: flex-end;
 
-  /* 核心：遮罩與漸層配置 (從頂部不透明 0% 到完全透明 100%) 
-     這裡模擬滾動邊界處呈現平滑淡出的視覺效果 */
   -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
   mask-image: linear-gradient(to top, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
 }
 
-/* 客製化滾動條寬度 */
 .scroll-content::-webkit-scrollbar {
   width: var(--scrollbar-width);
 }
@@ -110,7 +107,7 @@ html, body {
   border-radius: 5px;
 }
 
-/* 標題文字區塊 (限制在手機 xs 規格：20rem) */
+/* 標題文字區塊 */
 .title-container {
   width: 100%;
   max-width: var(--container-max-width);
@@ -131,17 +128,14 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* 考量手機底部安全區域 (如 Home Indicator 條) */
-  padding-bottom: calc(env(safe-area-inset-bottom) + 8px);
+  /* 🛠️ 關鍵修正：底部安全區獨立出來，避免寫在 body 導致語法失效 */
+  padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
 }
 
-/* 主要輸入列 (Composer Bar) */
 .composer-bar {
-  /* 響應式寬度：手機上滿版扣除兩邊安全留白，大螢幕最大不超過 768px */
   width: calc(100% - (var(--composer-bar_safe-margins) * 2));
   max-width: var(--composer-bar_width);
   height: var(--composer-bar_height);
-  
   background: #1e1e1e;
   border-radius: 26px;
   display: flex;
@@ -163,7 +157,6 @@ html, body {
   color: #666;
 }
 
-/* 主要輸入列內的按鈕圖示 */
 .icon-btn {
   width: 32px;
   height: 32px;
@@ -181,7 +174,6 @@ html, body {
   color: #000;
 }
 
-/* 底部工具列 (Composer Footer) */
 .composer-footer {
   width: 100%;
   height: var(--composer-footer_height);
@@ -221,9 +213,7 @@ html, body {
     
     <div class="composer-bar">
       <button class="icon-btn" style="margin-right: 8px; font-size: 20px;">+</button>
-      
       <input type="text" class="composer-input" placeholder="想問什麼都可以">
-      
       <button class="icon-btn" style="margin-right: 4px;">🎙️</button>
       <button class="icon-btn submit">↑</button>
     </div>
