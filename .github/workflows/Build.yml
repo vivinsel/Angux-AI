@@ -62,8 +62,7 @@ jobs:
             -workspace App.xcworkspace \
             -scheme App \
             -configuration Release \
-            -archivePath App.xcarchive \
-            -destination 'generic/platform=iOS'
+            -destination 'generic/platform=iOS' \CODE_SIGNING_ALLOWED=NO
 
       - name: Export IPA
         run: |
